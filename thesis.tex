@@ -1,0 +1,322 @@
+\documentclass[english]{kththesis}
+
+% Ignore overfull hbox warnings due to TODO's
+\hfuzz=100.0pt
+\vfuzz=100.0pt
+
+\setlength {\marginparwidth }{2cm} %leave some extra space for todo notes
+\usepackage{todonotes}
+
+\usepackage[perpage,para,symbol]{footmisc} %% use symbols to ``number'' footnotes and reset which symbol is used first on each page
+
+%% Reduce hyphenation as much as possible
+\hyphenpenalty=15000
+\tolerance=1000
+
+%%----------------------------------------------------------------------------
+%%   pcap2tex stuff
+%%----------------------------------------------------------------------------
+%\usepackage[dvipsnames*,svgnames]{xcolor} %% For extended colors
+\usepackage{tikz}
+\usetikzlibrary{arrows,decorations.pathmorphing,backgrounds,fit,positioning,calc,shapes}
+\usepackage{pgfmath}	% --math engine
+
+%% some additional useful packages
+\usepackage{rotating}		%% For text rotating
+\usepackage{array}		%% For table wrapping
+\usepackage{graphicx}	        %% Support for images
+\usepackage{float}		%% Suppor for more flexible floating box positioning
+\usepackage{mdwlist}            %% various list-related commands
+\usepackage{setspace}           %% For fine-grained control over line spacing
+\usepackage{listings}		%% For source code listing
+\usepackage{bytefield}          %% For packet drawings
+\usepackage{tabularx}		%% For simple table stretching
+\usepackage{multirow}	        %% Support for multirow colums in tables
+
+\usepackage{url}                %% Support for breaking URLs
+\usepackage{hyperref}
+\usepackage[all]{hypcap}	%% prevents an issue related to hyperref and caption linking
+%% setup hyperref to use the darkblue color on links
+\hypersetup{colorlinks,breaklinks,
+            linkcolor=darkblue,urlcolor=darkblue,
+            anchorcolor=darkblue,citecolor=darkblue}
+
+
+%% Some definitions of used colors
+\definecolor{darkblue}{rgb}{0.0,0.0,0.3} %% define a color called darkblue
+\definecolor{darkred}{rgb}{0.4,0.0,0.0}
+\definecolor{red}{rgb}{0.7,0.0,0.0}
+\definecolor{lightgrey}{rgb}{0.8,0.8,0.8}
+\definecolor{grey}{rgb}{0.6,0.6,0.6}
+\definecolor{darkgrey}{rgb}{0.4,0.4,0.4}
+\definecolor{aqua}{rgb}{0.0, 1.0, 1.0}
+
+%% If you are going to include source code (or code snippets)
+\usepackage{listings}
+%%\usepackage[cache=false]{minted} %% For source code highlighting
+%%\usemintedstyle{borland}
+
+\usepackage{csquotes} % Recommended by biblatex
+
+
+%% Acronyms
+% note that nonumberlist - removes the cross references to the pages where the acronym appears
+% note that nomain - does not produce a main gloassay, this only acronyms will be in the glossary
+% note that nopostdot - will present there being a period at the end of each entry
+\usepackage[acronym, section=section, nonumberlist, nomain, nopostdot]{glossaries}
+%\glsdisablehyper
+\makeglossaries
+\input{acronyms}                %load the acronyms file
+
+%% definition of new command for bytefield package
+\newcommand{\colorbitbox}[3]{%
+	\rlap{\bitbox{#2}{\color{#1}\rule{\width}{\height}}}%
+	\bitbox{#2}{#3}}
+
+\newenvironment{swedishnotes}%
+  {\begin{center}
+      \selectlanguage{swedish}
+      \color{blue}}%
+    {\end{center}\selectlanguage{english}
+    }
+
+\begin{document}
+\ifinswedish
+    \selectlanguage{swedish}
+\else
+\selectlanguage{english}
+\fi
+
+
+%% Information for inside title page
+\title{This is the title in the language of the thesis}
+\subtitle{An subtitle in the language of the thesis}
+
+% give the alternative title - i.e., if the thesis is in English, then give a Swedish title
+\alttitle{Detta är den svenska översättningen av titeln}
+\altsubtitle{Detta är den svenska översättningen av undertiteln}
+% alternative, if the thesis is in Swedish, then give an English title
+%\alttitle{This is the English translation of the title}
+%\altsubtitle{This is the English translation of the subtitle}
+
+\authorsLastname{Student}
+\authorsFirstname{Fake A.}
+\email{a@kth.se}
+\kthid{u100001}
+% If the student has an ORCiD - add it here
+\orcid{0000-0002-00001-1234}
+\authorsSchool{\schoolAcronym{EECS}}
+
+% If there is a second author - add them here:
+\secondAuthorsLastname{Student}
+\secondAuthorsFirstname{Fake B.}
+\secondemail{b@kth.se}
+\secondkthid{u100002}
+% If the student has an ORCiD - add it here
+\secondorcid{0000-0002-00001-5678}
+\secondAuthorsSchool{\schoolAcronym{ABE}}
+
+\supervisorAsLastname{Supervisor}
+\supervisorAsFirstname{A. Busy}
+\supervisorAsEmail{sa@kth.se}
+% If the supervisor is from within KTH add their KTHID, School and Department info
+\supervisorAsKTHID{u100003}
+\supervisorAsSchool{\schoolAcronym{EECS}}
+\supervisorAsDepartment{Computer Science}
+% other for a supervisor outside of KTH add their organization info
+%\supervisorAsOrganization{Timbuktu University, Department of Pseudoscience}
+
+%If there is a second supervisor add them here:
+\supervisorBsLastname{Supervisor}
+\supervisorBsFirstname{Another Busy}
+\supervisorBsEmail{sb@kth.se}
+% If the supervisor is from within KTH add their KTHID, School and Department info
+\supervisorBsKTHID{u100003}
+\supervisorBsSchool{\schoolAcronym{ABE}}
+\supervisorBsDepartment{Public Buildings}
+% other for a supervisor outside of KTH add their organization info
+%\supervisorBsOrganization{Timbuktu University, Department of Pseudoscience}
+
+\examinersLastname{Maguire Jr.}
+\examinersFirstname{Gerald Q.}
+\examinersEmail{maguire@kth.se}
+% If the examiner is from within KTH add their KTHID, School and Department info
+\examinersKTHID{u100004}
+\examinersSchool{\schoolAcronym{EECS}}
+\examinersDepartment{Computer Science}
+% other for a examiner outside of KTH add their organization info
+%\examinersOrganization{Timbuktu University, Department of Pseudoscience}
+
+
+\hostcompany{Företaget AB} % Remove this line if the project was not done at a host company
+%\hostorganization{CERN}   % if there was a host organization
+
+\date{\today}
+
+\programcode{TCOMK}
+%% Alternatively, you can say \programme{Civilingenjör Datateknik} to directly set the programme string
+
+\titlepage
+% document/book information page
+\bookinfopage
+
+% Frontmatter includes the abstracts and table-of-contents
+\frontmatter
+\setcounter{page}{1}
+\begin{abstract}
+  \markboth{\abstractname}{}
+  \todo[inline]{The first abstract should be in the language of the thesis.}
+  \todo[inline, backgroundcolor=aqua]{Abstract fungerar på svenska också.}
+
+\todo[inline]{Keep in mind that most of your potential readers are only going to read your title and abstract. This is why it is important that the abstract give them enough information that they can decide is this document relevant to them or not. Otherwise the likely default choice is to ignore the rest of your document.\\
+A abstract should stand on its own, i.e., no citations, cross references to the body of the document, acronyms must be spelled out, …\\
+Write this early and revise as necessary. This will help keep you focused on what you are trying to do.}
+
+Write an abstract\todo{Use about 1/2 A4-page (250 and 350 words).}  with the following components:
+\begin{itemize}
+  \item What is the topic area? (optional) Introduces the subject area for the project.
+  \item Short problem statement
+  \item Why was this problem worth a Master’s thesis project? (i.e., why is the problem both significant and of a suitable degree of difficulty for a Master’s thesis project? Why has no one else solved it yet?)
+  \item How did you solve the problem? What was your method/insight?
+  \item Results/Conclusions/Consequences/Impact: What are your key results/conclusions? What will others do based upon your results? What can be done now that you have finished - that could not be done before your thesis project was completed?\todo[inline]{The presentation of the results should be the main part of the abstract.}
+\end{itemize}
+
+\ifinswedish
+\subsection*{Nyckelord}
+5-6 nyckelord\todo{Nyckelord som beskriver innehållet i uppsatsrapporten}
+\else
+\subsection*{Keywords}
+5-6 keywords
+\fi
+\todo[inline]{Choosing good keywords can help others to locate your paper, thesis, dissertation, … and related work.}
+Choose the most specific keyword from those used in your domain, see for example:
+ACM's Computing Classification System (2012) or
+(2014) IEEE Taxonomy.
+
+Mechanics:
+\begin{itemize}
+  \item The first letter of a keyword should be set with a capital letter and proper names should be capitalized as usual.
+  \item Spell out acronyms and abbreviations.
+  \item Avoid "stop words" - as they generally carry little or no information.
+  \item List your keywords separated by commas (",").
+\end{itemize}
+Since you should have both English and Swedish keywords - you might think of ordering them in corresponding order (i.e., so that the nth word in each list correspond) - thus it would be easier to mechanically find matching keywords.
+
+
+\end{abstract}
+\cleardoublepage
+\ifinswedish
+    \begin{otherlanguage}{english}
+  \else
+    \begin{otherlanguage}{swedish}
+\fi
+  \begin{abstract}
+    \markboth{\abstractname}{}
+    \todo[inline]{All theses at KTH are required to have an abstract in both English and Swedish.\\
+If you are writing your thesis in English, you can leave this until the final version. If you are writing your thesis in Swedish then this should be done first – and you should revise as necessary along the way.\\
+If you are writing your thesis in English, then this section can be a summary targeted at a more general reader. However, if you are writing your thesis in Swedish, then the reverse is true – your abstract should be for your target audience, while an English summary can be written targeted at a more general audience.\\
+This means that the English abstract and Swedish sammnfattning
+or Swedish abstract and English summary need not be literal translations of each other.\\
+
+The abstract in the language used for the thesis should be the first abstract, while the Summary/Sammanfattning in the other language can follow.\\
+
+Exchange students many want to include one or more abstracts in the language(s) used in their home institutions to avoid the neeed to write another thesis when returing to their home institution.
+}
+
+\subsection*{Nyckelord}
+
+5-6 nyckelord\todo{Nyckelord som beskriver innehållet i uppsatsrapporten}
+
+
+  \end{abstract}
+\end{otherlanguage}
+\cleardoublepage
+
+\section*{Acknowledgments }
+\markboth{Acknowledgments}{}
+\todo[inline]{It is nice to acknowledge the people that have helped you. It is
+  also necessary to acknowledge any special permissions that you have gotten –
+  for example getting permission from the copyright owner to reproduce a
+  figure. In this case you should acknowledge them and this permission here
+  and in the figure’s caption. \\
+  Note: If you do not have the copyright owner’s permission, then you cannot use any copyrighted figures/tables/… .
+}
+\todo[inline, backgroundcolor=aqua]{I detta kapitel kan du e v nämna något om
+  din bakgrund om det påverkar rapporten på något sätt. Har du t ex inte
+  möjlighet att skriva perfekt svenska för att du är nyanländ till landet kan
+  det vara på sin plats att nämna detta här. OBS, detta får dock inte vara en
+  ursäkt för att lämna in en rapport med undermåligt språk, grammatik och
+  stavning (t ex får fel som en automatisk stavningskontroll och
+  grammatikkontroll kan upptäcka inte förekomma)\\
+
+En dualism som måste hanteras i hela rapporten och projektet
+}
+
+I would like to thank xxxx for having yyyy.\\
+
+\acknowlegmentssignature
+
+\fancypagestyle{plain}{}
+\renewcommand{\chaptermark}[1]{ \markboth{#1}{}}
+\tableofcontents
+  \markboth{\contentsname}{}
+
+\cleardoublepage
+\listoffigures
+
+\cleardoublepage
+
+\listoftables
+\cleardoublepage
+\lstlistoflistings\todo{If you have listings in your thesis.}
+\cleardoublepage
+\printglossary[type=\acronymtype, title={List of acronyms and abbreviations}]
+\todo[inline]{The list of acronyms and abbreviations should be in alphabetical order based on the spelling of the acronym or abbreviation.
+}
+\label{pg:lastPageofPreface}
+% Mainmatter is where the actual contents of the thesis goes
+\mainmatter
+
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+
+\input{chapters/introduction}
+\cleardoublepage
+
+\input{chapters/background}
+\cleardoublepage
+
+\input{chapters/method}
+\cleardoublepage
+
+\input{chapters/process}
+\cleardoublepage
+
+\input{chapters/results}
+\cleardoublepage
+
+\input{chapters/discussion}
+\cleardoublepage
+
+\input{chapters/conclusions}
+\cleardoublepage
+
+% Print the bibliography (and make it appear in the table of contents)
+%\printbibliography[heading=bibintoc]
+% The lines below are for BibTeX
+\bibliographystyle{myIEEEtran}
+\renewcommand{\bibname}{References}
+\addcontentsline{toc}{chapter}{References}
+\bibliography{references}
+
+\cleardoublepage
+\appendix
+\renewcommand{\chaptermark}[1]{\markboth{Appendix \thechapter\relax:\thinspace\relax#1}{}}
+\chapter{Something Extra}
+\todo[inline, backgroundcolor=aqua]{svensk: Extra Material som Bilaga}
+
+\label{pg:lastPageofMainmatter}
+
+\clearpage
+\section*{For DIVA}
+\divainfo{pg:lastPageofPreface}{pg:lastPageofMainmatter}
+\end{document}
